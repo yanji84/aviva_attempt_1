@@ -184,10 +184,11 @@ def handle_reference_search():
 def step2_results():
     toolbar("Quote Search Results", "Shows the matching quote(s) based on criteria.")
     st.info(f"Search Criteria — Company: All | Branches: All | Reference: {st.session_state.quote_reference}")
-    # Add client's first and last name from session state to the dataframe
+
     st.session_state.client_first = "Vincent"
     st.session_state.client_last = "Yeung"
-    df = pd.DataFrame([{
+
+    data = {
         "Reference Number": st.session_state["quote_reference"],
         "Prospect": f"{st.session_state['client_first']} {st.session_state['client_last']}, {st.session_state['client_addr']}",
         "Status": "In progress",
@@ -195,14 +196,43 @@ def step2_results():
         "Effective Date": st.session_state["effective"].strftime("%b %d, %Y"),
         "User ID": st.session_state["user_id"],
         "Company / Branch": f"{st.session_state['company']} — {st.session_state['branch']}",
-    }])
-    st.dataframe(df.style.hide(axis="index"), use_container_width=True)
-    c1, c2, c3, c4 = st.columns(4)
-    c1.button("Prev", on_click=lambda: st.session_state.update(current_step=1))
-    c2.button("More", disabled=True)
-    c3.button("Create New")
-    if c4.button("Open Quote"):
-        st.session_state["current_step"] = 3
+    }
+
+    # Custom table with clickable reference number
+    headers = ["Reference Number", "Prospect", "Status", "Process Date", "Effective Date", "User ID", "Company / Branch"]
+
+    # Header
+    c1, c2, c3, c4, c5, c6, c7 = st.columns([2, 3, 1, 1, 1, 1, 2])
+
+    # Manually align and bold headers
+    c1.markdown(f"**{headers[0]}**")
+    c2.markdown(f"**{headers[1]}**")
+    c3.markdown(f"**{headers[2]}**")
+    c4.markdown(f"**{headers[3]}**")
+    c5.markdown(f"**{headers[4]}**")
+    c6.markdown(f"**{headers[5]}**")
+    c7.markdown(f"**{headers[6]}**")
+
+    # Data row
+    c1, c2, c3, c4, c5, c6, c7 = st.columns([2, 3, 1, 1, 1, 1, 2])
+
+    with c1:
+        if st.button(data["Reference Number"], key="ref_button"):
+            st.session_state.current_step = 3
+            st.rerun()
+
+    with c2:
+        st.write(data["Prospect"])
+    with c3:
+        st.write(data["Status"])
+    with c4:
+        st.write(data["Process Date"])
+    with c5:
+        st.write(data["Effective Date"])
+    with c6:
+        st.write(data["User ID"])
+    with c7:
+        st.write(data["Company / Branch"])
 
 def step3_messages():
     toolbar("Step 3: Messages / Underwriting Rules", "System-generated rules tied to the quote.")
