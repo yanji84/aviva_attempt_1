@@ -175,17 +175,21 @@ def step3_messages():
 
 def step4_rating():
     toolbar("Step 4: Rating Summary", "Premium calculation and coverage breakdown.")
+
+    df = pd.DataFrame(st.session_state["coverage_rows"])
+
+    # Calculate total premium from the "Full Term" column
+    rating_subtotal = df["Full Term"].sum()
+
     st.write(f"**Reference:** {st.session_state['quote_reference']}  |  **Company/Branch:** {st.session_state['company']} — {st.session_state['branch']}  |  **Commission Variance:** 0.000")
     st.subheader("Premium Summary")
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Risk", st.session_state["client_addr"])
     c2.metric("Territory", "4/OZ02")
-    c3.metric("Sub Total", f"${st.session_state['rating_subtotal']:,.2f}")
-    c4.metric("Risk Total", f"${st.session_state['rating_subtotal']:,.2f}")
+    c3.metric("Sub Total", f"${rating_subtotal:,.2f}")
+    c4.metric("Risk Total", f"${rating_subtotal:,.2f}")
 
     st.subheader("Coverages")
-    df = pd.DataFrame(st.session_state["coverage_rows"])
-    df["Txn Premium"] = df["Txn Premium"].astype(str)
     st.dataframe(df.style.hide(axis="index"), use_container_width=True)
 
     c1, c2, c3, c4, c5, c6 = st.columns(6)
@@ -283,15 +287,15 @@ def step8_client_confirmation():
 def step9_policy_selection():
     toolbar("Step 9: Policy Selection", "Verify key policy details before issuance.")
     two_cols(
-        lambda: st.write(f"**Client:** {st.session_state['client_first']} Cheuk Fun {st.session_state['client_last']}  
-**Client Number:** {st.session_state['client_number']}"),
+        lambda: st.write(f'''**Client:** {st.session_state['client_first']} Cheuk Fun {st.session_state['client_last']}
+**Client Number:** {st.session_state['client_number']}'''),
         lambda: st.write(f"**Company/Branch:** {st.session_state['company']} — {st.session_state['branch']}")
     )
     two_cols(
-        lambda: st.write(f"**Province:** {st.session_state['province']}  
-**Product Type:** {st.session_state['product_type']}"),
-        lambda: st.write(f"**Broker #:** {st.session_state['broker_id']}  
-**Policy Term:** {st.session_state['effective'].strftime('%b %d, %Y')} · 12 months")
+        lambda: st.write(f'''**Province:** {st.session_state['province']}
+**Product Type:** {st.session_state['product_type']}'''),
+        lambda: st.write(f'''**Broker #:** {st.session_state['broker_id']}
+**Policy Term:** {st.session_state['effective'].strftime('%b %d, %Y')} · 12 months''')
     )
     c1, c2 = st.columns(2)
     c1.button("Cancel Transaction")
@@ -301,20 +305,20 @@ def step9_policy_selection():
 def step10_general_info():
     toolbar("Step 10: General Information", "Policy setup details and next workflow tabs.")
     two_cols(
-        lambda: st.write(f"**Policy Number:** {st.session_state['policy_number']}  
+        lambda: st.write(f'''**Policy Number:** {st.session_state['policy_number']}
 **Processing Date:** {st.session_state['process_date'].strftime('%b %d, %Y')}  
-**Status:** In Progress"),
-        lambda: st.write(f"**Company/Branch:** {st.session_state['company']} — {st.session_state['branch']}  
+**Status:** In Progress'''),
+        lambda: st.write(f'''**Company/Branch:** {st.session_state['company']} — {st.session_state['branch']}
 **Client Number:** {st.session_state['client_number']}  
-**Combined Policy Discount:** ✅")
+**Combined Policy Discount:** ✅''')
     )
     two_cols(
-        lambda: st.write(f"**Insured Type:** Individual  
+        lambda: st.write(f'''**Insured Type:** Individual
 **Insured Name:** {st.session_state['client_first']} Cheuk Fun {st.session_state['client_last']}  
-**Insured & Mailing Address:** {st.session_state['client_addr']}"),
-        lambda: st.write(f"**Master Broker:** Element Insurance — #{st.session_state['broker_id']}  
+**Insured & Mailing Address:** {st.session_state['client_addr']}'''),
+        lambda: st.write(f'''**Master Broker:** Element Insurance — #{st.session_state['broker_id']}
 **Term:** {st.session_state['effective'].strftime('%b %d, %Y')} → {(st.session_state['effective'] + timedelta(days=365)).strftime('%b %d, %Y')}  
-**Policy Province:** {st.session_state['province']}")
+**Policy Province:** {st.session_state['province']}''')
     )
     c1, c2, c3, c4, c5, c6 = st.columns(6)
     c1.button("Cancel Transaction")
