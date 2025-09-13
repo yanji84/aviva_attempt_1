@@ -187,22 +187,55 @@ def step2_results():
     # Add client's first and last name from session state to the dataframe
     st.session_state.client_first = "Vincent"
     st.session_state.client_last = "Yeung"
-    df = pd.DataFrame([{
-        "Reference Number": st.session_state["quote_reference"],
-        "Prospect": f"{st.session_state['client_first']} {st.session_state['client_last']}, {st.session_state['client_addr']}",
-        "Status": "In progress",
-        "Process Date": st.session_state["process_date"].strftime("%b %d, %Y"),
-        "Effective Date": st.session_state["effective"].strftime("%b %d, %Y"),
-        "User ID": st.session_state["user_id"],
-        "Company / Branch": f"{st.session_state['company']} — {st.session_state['branch']}",
-    }])
-    st.dataframe(df.style.hide(axis="index"), use_container_width=True)
-    c1, c2, c3, c4 = st.columns(4)
-    c1.button("Prev", on_click=lambda: st.session_state.update(current_step=1))
-    c2.button("More", disabled=True)
-    c3.button("Create New")
-    if c4.button("Open Quote"):
-        st.session_state["current_step"] = 3
+    
+    # Create a custom table with clickable reference number
+    st.markdown("### Quote Results")
+    
+    # Create table header
+    st.markdown("""
+    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <thead>
+            <tr style="background-color: #f0f0f0;">
+                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Reference Number</th>
+                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Prospect</th>
+                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Status</th>
+                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Process Date</th>
+                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Effective Date</th>
+                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">User ID</th>
+                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Company / Branch</th>
+            </tr>
+        </thead>
+    </table>
+    """, unsafe_allow_html=True)
+    
+    # Create clickable reference number row
+    col1, col2, col3, col4, col5, col6, col7 = st.columns([1.2, 2.5, 1, 1, 1, 0.8, 2])
+    
+    with col1:
+        if st.button(st.session_state["quote_reference"], key="ref_number_click"):
+            st.session_state["current_step"] = 3
+            st.rerun()
+    
+    with col2:
+        st.write(f"{st.session_state['client_first']} {st.session_state['client_last']}, {st.session_state['client_addr']}")
+    
+    with col3:
+        st.write("In progress")
+    
+    with col4:
+        st.write(st.session_state["process_date"].strftime("%b %d, %Y"))
+    
+    with col5:
+        st.write(st.session_state["effective"].strftime("%b %d, %Y"))
+    
+    with col6:
+        st.write(st.session_state["user_id"])
+    
+    with col7:
+        st.write(f"{st.session_state['company']} — {st.session_state['branch']}")
+    
+    # Add a divider line
+    st.markdown("---")
 
 def step3_messages():
     toolbar("Step 3: Messages / Underwriting Rules", "System-generated rules tied to the quote.")
