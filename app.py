@@ -1,17 +1,24 @@
-
 import streamlit as st
 import pandas as pd
 from datetime import date, timedelta
 
+# ---------- Page Config ----------
 st.set_page_config(page_title="Aviva Business Portal - Mock Demo", layout="wide")
+
+# ---------- Style Loader ----------
+def load_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+load_css('style.css')
 
 # ---------- Session State ----------
 def init_state():
     defaults = {
         "current_step": 1,
-        "quote_reference": "P11162731HAB0003",
-        "client_last": "Yeung",
-        "client_first": "Vincent",
+        "quote_reference": "",
+        "client_last": "",
+        "client_first": "",
         "client_addr": "1386 Castlemore Ave, Markham ON",
         "company": "Aviva Insurance Company of Canada",
         "branch": "A-10 Ontario",
@@ -40,6 +47,7 @@ def init_state():
         "client_created": False,
         "associate_client": "No",
         "consent_recorded": False,
+        "search_message": ""
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -47,38 +55,41 @@ def init_state():
 
 init_state()
 
-# ---------- Helpers ----------
-def stepper():
-    with st.sidebar:
-        st.title("Aviva Business Portal")
-        st.caption("Mock UI demo of broker workflow")
-        step = st.radio(
-            "Navigate steps",
-            options=list(range(1, 11)),
-            format_func=lambda i: {
-                1: "1) Quote Inquiry",
-                2: "2) Quote Search Results",
-                3: "3) Messages / Underwriting Rules",
-                4: "4) Rating Summary",
-                5: "5) Confirmation Options",
-                6: "6) Client / Policy Search Results",
-                7: "7) Client Entry",
-                8: "8) Client Creation Confirmation",
-                9: "9) Policy Selection",
-                10: "10) General Information",
-            }[i],
-            index=st.session_state["current_step"] - 1
-        )
-        if step != st.session_state["current_step"]:
-            st.session_state["current_step"] = step
-        st.markdown("---")
-        col1, col2 = st.columns(2)
-        if col1.button("◀ Prev", use_container_width=True, disabled=st.session_state["current_step"] == 1):
-            st.session_state["current_step"] -= 1
-            st.rerun()
-        if col2.button("Next ▶", use_container_width=True, disabled=st.session_state["current_step"] == 10):
-            st.session_state["current_step"] += 1
-            st.rerun()
+# ---------- UI Components ----------
+def app_header():
+    # Demo Banner
+    st.markdown(
+        '<div class="demo-banner">This is a demo app for Aviva Business Portal. The purpose is to demonstrate TSR Upload Agentic Workflow.</div>',
+        unsafe_allow_html=True
+    )
+
+    # Header with Logo and Title
+    st.markdown(
+        """
+        <div style="background-color: #00005A; padding: 10px; border-radius: 5px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Aviva_Logo.svg" alt="Aviva Logo" style="height: 50px; float: left; margin-right: 20px;">
+            <h1 style="color: white; margin-top: 10px; float: left;">QUOTE</h1>
+            <div style="float: right; margin-top: 10px;">
+                <a href="#" style="color: white; margin-left: 15px;">HELP</a>
+                <a href="#" style="color: white; margin-left: 15px;">LEGAL</a>
+                <a href="#" style="color: white; margin-left: 15px;">SIGN OUT</a>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Navigation Tabs
+    tab_names = ["Client", "Quote Inquiry", "Policy", "Work in Progress", "Requests", "Lists"]
+    selected_tab = st.selectbox("Navigation", tab_names, index=1, label_visibility="collapsed")
+
+    # This is a simple way to handle navigation for this demo.
+    # A more complex app might need a more robust router.
+    #if selected_tab == "Quote Inquiry" and st.session_state.current_step != 1:
+    #    st.session_state.current_step = 1
+    #    st.rerun()
+
 
 def toolbar(title, subtitle=None):
     st.markdown(f"### {title}")
@@ -93,56 +104,89 @@ def two_cols(a, b):
 
 # ---------- Step Renderers ----------
 def step1_quote_inquiry():
-    toolbar("Step 1: Quote Inquiry", "Search scope, locate-by filters, and workflow tabs.")
-    with st.form("quote_inquiry"):
-        st.subheader("Search Scope")
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            st.text_input("Company", value=st.session_state["company"])
-        with c2:
-            st.text_input("Branch", value=st.session_state["branch"])
-        with c3:
-            st.text_input("Broker # / User ID", value=st.session_state["user_id"])
+    st.header("QUOTE SEARCH")
+    st.caption(f"GQL001 ver 7.0 | {date.today().strftime('%a %b %d %H:%M:%S %Y')}")
 
-        st.subheader("Locate By")
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            st.text_input("Last Name", value=st.session_state["client_last"])
-        with c2:
-            st.text_input("First Name", value=st.session_state["client_first"])
-        with c3:
-            st.text_input("Company Name")
+    # Row 1: Company and Branch
+    c1, c2 = st.columns(2)
+    with c1:
+        st.selectbox("Company", ["All Companies"], label_visibility="collapsed")
+    with c2:
+        st.selectbox("Branch", ["All Branches"], label_visibility="collapsed")
 
+    # Row 2: Broker # and User ID
+    c1, c2, c3 = st.columns([2, 1, 2])
+    with c1:
+        st.text_input("Broker #")
+    with c2:
+        st.markdown('<p style="text-align: center; margin-top: 30px;">or</p>', unsafe_allow_html=True)
+    with c3:
+        st.text_input("User ID")
+
+
+    st.subheader("Locate By")
+    st.radio("Locate By",
+             options=["Last Name / Company Name", "Product", "Reference Number"],
+             index=2, # Default to Reference Number
+             key="locate_by",
+             label_visibility="collapsed")
+
+    if st.session_state.locate_by == "Last Name / Company Name":
         c1, c2, c3 = st.columns(3)
         with c1:
+            st.text_input("Last Name / Company Name")
+        with c2:
+            st.text_input("First Name")
+        with c3:
             st.text_input("Postal Code")
-        with c2:
-            st.selectbox("Product", ["Property", "Auto", "Liability"], index=0)
-        with c3:
-            st.selectbox("Status", ["In progress", "Pending", "Active"], index=0)
-
+    elif st.session_state.locate_by == "Product":
         c1, c2 = st.columns(2)
         with c1:
-            st.text_input("Reference Number", value=st.session_state["quote_reference"])
+            st.selectbox("Product", ["All", "Property", "Auto"], index=0)
         with c2:
-            st.date_input("Date range start", value=st.session_state["process_date"] - timedelta(days=30))
+            st.selectbox("Status", ["All", "In Progress", "Bound"], index=0)
+    elif st.session_state.locate_by == "Reference Number":
+        st.text_input("Reference Number", key="reference_number_input", value=st.session_state.quote_reference, on_change=handle_reference_search)
+        if st.session_state.search_message:
+            st.warning(st.session_state.search_message)
 
-        c1, c2 = st.columns(2)
-        with c1:
-            st.date_input("Date range end", value=st.session_state["process_date"])
-        with c2:
-            pass
+    # Date fields from the original screenshot
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.selectbox("Type of Date", ["Process Date", "Effective Date"])
+    with c2:
+        st.date_input("From", value=None)
+    with c3:
+        st.date_input("To", value=None)
 
-        submitted = st.form_submit_button("Confirm")
-        if submitted:
-            st.success("Search executed. 1 result found by reference number.")
-            st.session_state["current_step"] = 2
+    # Bottom buttons
+    c1, c2 = st.columns([5, 1]) # Push confirm to the right
+    with c2:
+        if st.button("Confirm"):
+            if st.session_state.locate_by == "Reference Number":
+                handle_reference_search()
+                # After handling the search, we need to rerun to see the changes
+                st.rerun()
+            else:
+                st.warning("This search type is not yet implemented.")
 
-    st.button("Cancel Transaction", key="cancel1")
+def handle_reference_search():
+    ref_num = st.session_state.reference_number_input
+    if ref_num == "P11162731HAB0003":
+        st.session_state.quote_reference = ref_num
+        st.session_state.current_step = 2
+        st.session_state.search_message = ""
+    elif ref_num:
+        st.session_state.search_message = "No result found"
+    else:
+        st.session_state.search_message = ""
 
 def step2_results():
-    toolbar("Step 2: Quote Search Results", "Shows the matching quote(s) based on criteria.")
-    st.info(f"Search Criteria — Company: All | Branches: All | Reference: 17575232903866")
+    toolbar("Quote Search Results", "Shows the matching quote(s) based on criteria.")
+    st.info(f"Search Criteria — Company: All | Branches: All | Reference: {st.session_state.quote_reference}")
+    # Add client's first and last name from session state to the dataframe
+    st.session_state.client_first = "Vincent"
+    st.session_state.client_last = "Yeung"
     df = pd.DataFrame([{
         "Reference Number": st.session_state["quote_reference"],
         "Prospect": f"{st.session_state['client_first']} {st.session_state['client_last']}, {st.session_state['client_addr']}",
@@ -154,7 +198,7 @@ def step2_results():
     }])
     st.dataframe(df.style.hide(axis="index"), use_container_width=True)
     c1, c2, c3, c4 = st.columns(4)
-    c1.button("Prev", disabled=True)
+    c1.button("Prev", on_click=lambda: st.session_state.update(current_step=1))
     c2.button("More", disabled=True)
     c3.button("Create New")
     if c4.button("Open Quote"):
@@ -306,18 +350,18 @@ def step10_general_info():
     toolbar("Step 10: General Information", "Policy setup details and next workflow tabs.")
     two_cols(
         lambda: st.write(f'''**Policy Number:** {st.session_state['policy_number']}
-**Processing Date:** {st.session_state['process_date'].strftime('%b %d, %Y')}  
+**Processing Date:** {st.session_state['process_date'].strftime('%b %d, %Y')}
 **Status:** In Progress'''),
         lambda: st.write(f'''**Company/Branch:** {st.session_state['company']} — {st.session_state['branch']}
-**Client Number:** {st.session_state['client_number']}  
+**Client Number:** {st.session_state['client_number']}
 **Combined Policy Discount:** ✅''')
     )
     two_cols(
         lambda: st.write(f'''**Insured Type:** Individual
-**Insured Name:** {st.session_state['client_first']} Cheuk Fun {st.session_state['client_last']}  
+**Insured Name:** {st.session_state['client_first']} Cheuk Fun {st.session_state['client_last']}
 **Insured & Mailing Address:** {st.session_state['client_addr']}'''),
         lambda: st.write(f'''**Master Broker:** Element Insurance — #{st.session_state['broker_id']}
-**Term:** {st.session_state['effective'].strftime('%b %d, %Y')} → {(st.session_state['effective'] + timedelta(days=365)).strftime('%b %d, %Y')}  
+**Term:** {st.session_state['effective'].strftime('%b %d, %Y')} → {(st.session_state['effective'] + timedelta(days=365)).strftime('%b %d, %Y')}
 **Policy Province:** {st.session_state['province']}''')
     )
     c1, c2, c3, c4, c5, c6 = st.columns(6)
@@ -332,8 +376,9 @@ def step10_general_info():
     if st.session_state["consent_recorded"]:
         st.success("Customer consent recorded. Continue to Risks → Coverages → Billing → Finalize.")
 
-# ---------- Main ----------
-stepper()
+# ---------- Main App Logic ----------
+app_header()
+
 step_map = {
     1: step1_quote_inquiry,
     2: step2_results,
@@ -346,4 +391,9 @@ step_map = {
     9: step9_policy_selection,
     10: step10_general_info,
 }
+
+# This check is to prevent re-rendering issues with on_change
+if "current_step" not in st.session_state:
+    st.session_state.current_step = 1
+
 step_map[st.session_state["current_step"]]()

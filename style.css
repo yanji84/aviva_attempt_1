@@ -1,0 +1,71 @@
+/* style.css */
+
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Header styling */
+div[data-testid="stHeader"] {
+    display: none;
+}
+
+/* Make app UI style like the screenshot */
+[data-testid="stAppViewContainer"] {
+    background-color: #FFFFFF;
+}
+
+[data-testid="stSidebar"] {
+    background-color: #EFEFEF;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #00005A;
+}
+
+/* Style for the top navigation bar */
+.nav-bar {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: #00005A;
+    color: white;
+}
+
+.nav-bar a {
+    color: white;
+    text-decoration: none;
+}
+
+/* Main content styling */
+.main-content {
+    padding: 20px;
+}
+
+/* Button styling */
+.stButton button {
+    background-color: #D3D3D3;
+    color: #000000;
+    border-radius: 5px;
+    padding: 10px 20px;
+    border: 1px solid #000000;
+}
+
+.stButton button:hover {
+    background-color: #C0C0C0;
+}
+
+/* Styling for the demo banner */
+.demo-banner {
+    background-color: #f0f0f0;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #00005A;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
