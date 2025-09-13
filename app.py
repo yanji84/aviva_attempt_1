@@ -140,12 +140,7 @@ def step1_quote_inquiry():
         with c2:
             st.selectbox("Status", ["All", "In Progress", "Bound"], index=0)
     elif locate_by == "Reference Number":
-        c1, c2 = st.columns([3, 1])
-        with c1:
-            st.text_input("Reference Number", key="reference_number_input", value=st.session_state.quote_reference)
-        with c2:
-            if st.button("Search", key="search_ref"):
-                handle_reference_search()
+        st.text_input("Reference Number", key="reference_number_input", value=st.session_state.quote_reference, on_change=handle_reference_search)
         if st.session_state.search_message:
             st.warning(st.session_state.search_message)
 
@@ -171,12 +166,10 @@ def handle_reference_search():
         st.session_state.quote_reference = ref_num
         st.session_state.current_step = 2
         st.session_state.search_message = ""
-        # No rerun needed here, Streamlit handles it with the button click
     elif ref_num:
         st.session_state.search_message = "No result found"
     else:
         st.session_state.search_message = ""
-    st.rerun()
 
 
 def step2_results():
