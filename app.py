@@ -86,9 +86,9 @@ def app_header():
 
     # This is a simple way to handle navigation for this demo.
     # A more complex app might need a more robust router.
-    if selected_tab == "Quote Inquiry" and st.session_state.current_step != 1:
-        st.session_state.current_step = 1
-        st.rerun()
+    #if selected_tab == "Quote Inquiry" and st.session_state.current_step != 1:
+    #    st.session_state.current_step = 1
+    #    st.rerun()
 
 
 def toolbar(title, subtitle=None):
@@ -180,7 +180,6 @@ def handle_reference_search():
         st.session_state.search_message = "No result found"
     else:
         st.session_state.search_message = ""
-
 
 def step2_results():
     toolbar("Quote Search Results", "Shows the matching quote(s) based on criteria.")
