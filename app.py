@@ -1,5 +1,6 @@
 
 import streamlit as st
+import pandas as pd
 from datetime import date, timedelta
 
 st.set_page_config(page_title="Aviva Business Portal - Mock Demo", layout="wide")
@@ -74,10 +75,10 @@ def stepper():
         col1, col2 = st.columns(2)
         if col1.button("◀ Prev", use_container_width=True, disabled=st.session_state["current_step"] == 1):
             st.session_state["current_step"] -= 1
-            st.experimental_rerun()
+            st.rerun()
         if col2.button("Next ▶", use_container_width=True, disabled=st.session_state["current_step"] == 10):
             st.session_state["current_step"] += 1
-            st.experimental_rerun()
+            st.rerun()
 
 def toolbar(title, subtitle=None):
     st.markdown(f"### {title}")
@@ -142,7 +143,7 @@ def step1_quote_inquiry():
 def step2_results():
     toolbar("Step 2: Quote Search Results", "Shows the matching quote(s) based on criteria.")
     st.info(f"Search Criteria — Company: All | Branches: All | Reference: 17575232903866")
-    st.dataframe([{
+    df = pd.DataFrame([{
         "Reference Number": st.session_state["quote_reference"],
         "Prospect": f"{st.session_state['client_first']} {st.session_state['client_last']}, {st.session_state['client_addr']}",
         "Status": "In progress",
@@ -150,7 +151,8 @@ def step2_results():
         "Effective Date": st.session_state["effective"].strftime("%b %d, %Y"),
         "User ID": st.session_state["user_id"],
         "Company / Branch": f"{st.session_state['company']} — {st.session_state['branch']}",
-    }], use_container_width=True, hide_index=True)
+    }])
+    st.dataframe(df.style.hide(axis="index"), use_container_width=True)
     c1, c2, c3, c4 = st.columns(4)
     c1.button("Prev", disabled=True)
     c2.button("More", disabled=True)
@@ -182,7 +184,9 @@ def step4_rating():
     c4.metric("Risk Total", f"${st.session_state['rating_subtotal']:,.2f}")
 
     st.subheader("Coverages")
-    st.dataframe(st.session_state["coverage_rows"], use_container_width=True, hide_index=True)
+    df = pd.DataFrame(st.session_state["coverage_rows"])
+    df["Txn Premium"] = df["Txn Premium"].astype(str)
+    st.dataframe(df.style.hide(axis="index"), use_container_width=True)
 
     c1, c2, c3, c4, c5, c6 = st.columns(6)
     c1.button("Cancel Transaction")
@@ -219,7 +223,7 @@ def step6_client_search():
     if c1.button("Create New Client ➜"):
         st.session_state["current_step"] = 7
     if c2.button("New Search"):
-        st.experimental_rerun()
+        st.rerun()
 
 def step7_client_entry():
     toolbar("Step 7: Client Entry", "Capture necessary client details to create the insured.")
