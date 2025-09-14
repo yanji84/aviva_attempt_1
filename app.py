@@ -35,8 +35,8 @@ def init_state():
             {"Coverage": "Dwelling Building", "Limit": 702450, "Deductible": 500, "Txn Premium": "Incl", "Full Term": 2183.00},
             {"Coverage": "Personal Property", "Limit": 140490, "Deductible": 500, "Txn Premium": "Incl", "Full Term": 0.00},
             {"Coverage": "Legal Liability", "Limit": 1000000, "Deductible": 0, "Txn Premium": "Incl", "Full Term": 0.00},
-            {"Coverage": "Sewer Backup", "Limit": 25000, "Deductible": 2500, "Txn Premium": 75.00, "Full Term": 75.00},
-            {"Coverage": "Overland Water", "Limit": 25000, "Deductible": 2500, "Txn Premium": 120.00, "Full Term": 120.00},
+            {"Coverage": "Sewer Backup", "Limit": 25000, "Deductible": 2500, "Txn Premium": "75.00", "Full Term": 75.00},
+            {"Coverage": "Overland Water", "Limit": 25000, "Deductible": 2500, "Txn Premium": "120.00", "Full Term": 120.00},
             {"Coverage": "By-Law Coverage", "Limit": 70000, "Deductible": 500, "Txn Premium": "Incl", "Full Term": 0.00},
         ],
         "uw_rules": [
@@ -268,7 +268,7 @@ def step4_rating():
     c4.metric("Risk Total", f"${rating_subtotal:,.2f}")
 
     st.subheader("Coverages")
-    st.dataframe(df.style.hide(axis="index"), use_container_width=True)
+    st.dataframe(df.style.hide(axis="index"), width='stretch')
 
     c1, c2, c3, c4, c5, c6 = st.columns(6)
     c1.button("Cancel Transaction")
@@ -278,6 +278,7 @@ def step4_rating():
     c5.button("Save Incomplete")
     if c6.button("Next ➜"):
         st.session_state["current_step"] = 5
+        st.rerun()
 
 def step5_confirmation():
     toolbar("Step 5: Confirmation Options", "Save, re-quote, or convert to new business.")
@@ -509,6 +510,7 @@ def step8_client_confirmation():
              options=["No", "Yes"], key="associate_client")
     if st.button("Confirm ➜"):
         st.session_state["current_step"] = 9
+        st.rerun()
 
 def step9_policy_selection():
     toolbar("Step 9: Policy Selection", "Verify key policy details before issuance.")
@@ -527,6 +529,7 @@ def step9_policy_selection():
     c1.button("Cancel Transaction")
     if c2.button("Confirm ➜"):
         st.session_state["current_step"] = 10
+        st.rerun()
 
 def step10_general_info():
     toolbar("Step 10: General Information", "Policy setup details and next workflow tabs.")
