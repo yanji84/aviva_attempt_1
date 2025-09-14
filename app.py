@@ -249,6 +249,7 @@ def step3_messages():
     c3.button("Save Incomplete")
     if c4.button("Continue ➜"):
         st.session_state["current_step"] = 4
+        st.rerun()
 
 def step4_rating():
     toolbar("Step 4: Rating Summary", "Premium calculation and coverage breakdown.")
@@ -291,66 +292,214 @@ def step5_confirmation():
         if choice == "Save Quote and Convert to New Business":
             st.success("Quote converted to New Business.")
             st.session_state["current_step"] = 6
+            st.rerun()
         elif choice == "Save Quote and Re-Quote":
             st.info("Quote saved. You can re-run underwriting/pricing.")
         else:
             st.session_state["current_step"] = 1
+            st.rerun()
 
 def step6_client_search():
-    toolbar("Step 6: Client / Policy Search Results", "Validate if client already exists.")
-    st.info("Search Criteria — Company: Aviva Insurance Company of Canada | Branch: A-10 Ontario | Client Name: Yeung")
-    st.warning("No items matching your search criteria were found.")
+    # Header with version and timestamp
+    st.markdown("### CLIENT / POLICY SEARCH RESULTS")
+    st.markdown(f'<div style="float: right; color: #666; font-size: 14px;">GCL002A ver 7.0</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="float: right; clear: both; color: #666; font-size: 14px;">{date.today().strftime("Wed %d %b %y %H:%M:%S %p")}</div>', unsafe_allow_html=True)
+    st.markdown('<div style="clear: both;"></div>', unsafe_allow_html=True)
+    
+    # Search Criteria Section
+    st.markdown("""
+    <div style="background-color: #003366; color: white; padding: 8px; margin: 10px 0; font-weight: bold;">
+        SEARCH CRITERIA
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Create search criteria display in a structured format
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("**Company**")
+        st.markdown("1 - Aviva Insurance Company of Canada")
+        st.markdown("**Last Name / Company Name**")
+        st.markdown("YEUNG")
+    
+    with col2:
+        st.markdown("**Branch**")
+        st.markdown("A - 10 - Ontario")
+        st.markdown("**First Initial**")
+        st.markdown("")
+        st.markdown("**Postal Code**")
+        st.markdown("")
+    
+    # Search Results Section
+    st.markdown("""
+    <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+        SEARCH RESULTS
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Instructions
+    st.markdown("""
+    <div style="margin: 10px 0; font-size: 14px;">
+        To view a particular Client's list of policies, please select the Policy Number(s) link to the right of that Client's name.<br>
+        To view information at a Client's detail level, please select the Client Number link to the left of that Client's name.
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Results table header
+    st.markdown("""
+    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+        <thead>
+            <tr style="background-color: #f0f0f0; border: 1px solid #ccc;">
+                <th style="padding: 8px; border: 1px solid #ccc; text-align: left; width: 15%;">Client Number</th>
+                <th style="padding: 8px; border: 1px solid #ccc; text-align: left; width: 25%;">Client Name</th>
+                <th style="padding: 8px; border: 1px solid #ccc; text-align: left; width: 15%;">Policy List</th>
+                <th style="padding: 8px; border: 1px solid #ccc; text-align: left; width: 45%;">Address</th>
+            </tr>
+        </thead>
+    </table>
+    """, unsafe_allow_html=True)
+    
+    # No results message
+    st.markdown("""
+    <div style="text-align: center; padding: 20px; font-weight: bold; color: #666;">
+        No items matching your search criteria were found.
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Bottom navigation buttons
+    st.markdown("<br>", unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     if c1.button("Create New Client ➜"):
         st.session_state["current_step"] = 7
+        st.rerun()
     if c2.button("New Search"):
         st.rerun()
 
 def step7_client_entry():
-    toolbar("Step 7: Client Entry", "Capture necessary client details to create the insured.")
+    # Header with version and timestamp
+    st.markdown("### CLIENT ENTRY")
+    st.markdown(f'<div style="float: right; color: #666; font-size: 14px;">NCL005 ver 7.0</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="float: right; clear: both; color: #666; font-size: 14px;">{date.today().strftime("Wed %d %b %y %H:%M:%S %p")}</div>', unsafe_allow_html=True)
+    st.markdown('<div style="clear: both;"></div>', unsafe_allow_html=True)
+    
     with st.form("client_entry"):
+        # Company and Branch Section
+        st.markdown("""
+        <div style="background-color: #003366; color: white; padding: 8px; margin: 10px 0; font-weight: bold;">
+            COMPANY AND BRANCH
+        </div>
+        """, unsafe_allow_html=True)
+        
+        c1, c2, c3 = st.columns([2, 2, 1])
+        with c1:
+            st.markdown("**Company**")
+            st.text_input("Company", value="1 - Aviva Insurance Company of Canada", disabled=True, label_visibility="collapsed")
+        with c2:
+            st.markdown("**Branch**")
+            st.text_input("Branch", value="A - 10 - Ontario", disabled=True, label_visibility="collapsed")
+        with c3:
+            st.markdown("**Broker #**")
+            st.text_input("Broker #", value=st.session_state["broker_id"], label_visibility="collapsed")
+
+        # Client Type Section
+        st.markdown("""
+        <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+            CLIENT TYPE
+        </div>
+        """, unsafe_allow_html=True)
+        
         c1, c2, c3 = st.columns(3)
         with c1:
-            st.text_input("Company", st.session_state["company"])
+            st.markdown("**Client Type**")
+            st.selectbox("Client Type", ["Insured"], index=0, label_visibility="collapsed")
+            st.markdown("**VIP**")
+            col1, col2 = st.columns([1, 4])
+            with col1:
+                st.radio("VIP", ["Yes", "No"], index=1, label_visibility="collapsed", horizontal=True)
         with c2:
-            st.text_input("Branch", st.session_state["branch"])
+            st.markdown("**Date of Birth**")
+            st.date_input("Date of Birth", value=date(1980,1,1), label_visibility="collapsed")
+            st.markdown("**Member #**")
+            st.text_input("Member #", label_visibility="collapsed")
         with c3:
-            st.text_input("Broker #", st.session_state["broker_id"])
+            st.markdown("**Language**")
+            st.selectbox("Language", ["English", "French"], index=0, label_visibility="collapsed")
+            st.markdown("**Broker Client ID**")
+            st.text_input("Broker Client ID", label_visibility="collapsed")
 
-        st.subheader("Client Type")
-        c1, c2, c3, c4 = st.columns(4)
+        # Client Name Section
+        st.markdown("""
+        <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+            CLIENT NAME
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("**First Named Insured**")
+        c1, c2, c3 = st.columns([1, 2, 2])
         with c1:
-            st.selectbox("Client Type", ["Insured"], index=0)
+            st.markdown("**Title**")
+            st.text_input("Title", label_visibility="collapsed")
         with c2:
-            st.date_input("Date of Birth", value=date(1980,1,1))
+            st.markdown("**Last Name**")
+            st.text_input("Last Name", value="YEUNG", label_visibility="collapsed")
         with c3:
-            st.selectbox("Language", ["English", "French"], index=0)
+            st.markdown("**First Name**")
+            st.text_input("First Name", value="VINCENT", label_visibility="collapsed")
+        
+        st.markdown("**Or**")
+        st.markdown("**Company Name**")
+        st.text_input("Company Name", label_visibility="collapsed")
+
+        # Additional Named Insured Section
+        st.markdown("**Additional Named Insured**")
+        c1, c2, c3, c4 = st.columns([1, 1, 2, 2])
+        with c1:
+            st.markdown("**Name Link**")
+            st.selectbox("Name Link", [""], label_visibility="collapsed")
+        with c2:
+            st.markdown("**Title**")
+            st.text_input("Additional Title", label_visibility="collapsed")
+        with c3:
+            st.markdown("**Last Name**")
+            st.text_input("Additional Last Name", label_visibility="collapsed")
         with c4:
-            st.checkbox("VIP")
+            st.markdown("**First Name**")
+            st.text_input("Additional First Name", label_visibility="collapsed")
+        
+        st.markdown("**Or**")
+        st.markdown("**Company Name**")
+        st.text_input("Additional Company Name", label_visibility="collapsed")
 
-        st.subheader("Client Name")
-        c1, c2 = st.columns(2)
+        # Legal Address Section
+        st.markdown("""
+        <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+            LEGAL ADDRESS
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("**Address**")
+        st.text_input("Address", value="1386 CASTLEMORE AVE", label_visibility="collapsed")
+
+        # Bottom buttons row
+        st.markdown("<br>", unsafe_allow_html=True)
+        c1, c2, c3, c4, c5 = st.columns(5)
+        
         with c1:
-            st.text_input("Last Name", st.session_state["client_last"])
+            cancel = st.form_submit_button("Cancel Transaction", type="secondary")
         with c2:
-            st.text_input("First Name", st.session_state["client_first"])
-
-        st.subheader("Legal Address")
-        st.text_input("Address", st.session_state["client_addr"])
-        st.text_input("City", "Markham")
-        st.text_input("Province", st.session_state["province"])
-        st.text_input("Postal Code", "")
-
-        st.markdown("**Next Steps**")
-        c1, c2, c3, c4 = st.columns(4)
-        c1.button("Additional Names")
-        c2.button("Additional Address")
-        c3.button("Bank Details")
-        submitted = c4.form_submit_button("Confirm")
-        if submitted:
+            additional1 = st.form_submit_button("Additional Names", type="secondary", key="additional_1")
+        with c3:
+            additional2 = st.form_submit_button("Additional Address", type="secondary", key="additional_2")
+        with c4:
+            bank = st.form_submit_button("Bank Details", type="secondary")
+        with c5:
+            confirm = st.form_submit_button("Confirm", type="primary")
+        
+        if confirm:
             st.session_state["client_created"] = True
             st.success("Client created successfully.")
             st.session_state["current_step"] = 8
+            st.rerun()
 
 def step8_client_confirmation():
     toolbar("Step 8: Client Creation Confirmation", "Client successfully created; choose association.")
