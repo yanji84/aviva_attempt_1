@@ -57,45 +57,46 @@ init_state()
 
 # ---------- UI Components ----------
 def app_header():
-    # Demo Banner
+    # Enhanced Demo Banner
     st.markdown(
-        '<div class="demo-banner">This is a demo app for Aviva Business Portal. The purpose is to demonstrate TSR Upload Agentic Workflow.</div>',
-        unsafe_allow_html=True
-    )
-
-    # Header with Logo and Title
-    st.markdown(
-        """
-        <div style="background-color: #00005A; padding: 10px; border-radius: 5px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Aviva_Logo.svg" alt="Aviva Logo" style="height: 50px; float: left; margin-right: 20px;">
-            <h1 style="color: white; margin-top: 10px; float: left;">QUOTE</h1>
-            <div style="float: right; margin-top: 10px;">
-                <a href="#" style="color: white; margin-left: 15px;">HELP</a>
-                <a href="#" style="color: white; margin-left: 15px;">LEGAL</a>
-                <a href="#" style="color: white; margin-left: 15px;">SIGN OUT</a>
+        '''
+        <div class="demo-banner">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+                <span>Demo Purpose Only - Aviva Business Portal TSR Upload Agentic Workflow</span>
             </div>
-            <div style="clear: both;"></div>
         </div>
-        """,
+        ''',
         unsafe_allow_html=True
     )
 
-    # Navigation Tabs
-    tab_names = ["Client", "Quote Inquiry", "Policy", "Work in Progress", "Requests", "Lists"]
-    selected_tab = st.selectbox("Navigation", tab_names, index=1, label_visibility="collapsed")
-
-    # This is a simple way to handle navigation for this demo.
-    # A more complex app might need a more robust router.
-    #if selected_tab == "Quote Inquiry" and st.session_state.current_step != 1:
-    #    st.session_state.current_step = 1
-    #    st.rerun()
+    # Navigation removed as requested
 
 
 def toolbar(title, subtitle=None):
-    st.markdown(f"### {title}")
-    if subtitle:
-        st.caption(subtitle)
-    st.markdown("---")
+    st.markdown(f"""
+    <div class="toolbar-container" style="
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        margin: 16px 0 24px 0;
+        box-shadow: 0 2px 4px var(--shadow-color);
+    ">
+        <h2 style="
+            color: var(--text-primary);
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        ">{title}</h2>
+        {f'<p style="color: var(--text-secondary); margin: 0; font-size: 16px; font-weight: 400;">{subtitle}</p>' if subtitle else ''}
+    </div>
+    """, unsafe_allow_html=True)
 
 def two_cols(a, b):
     c1, c2 = st.columns(2)
@@ -191,48 +192,62 @@ def step2_results():
     # Create a custom table with clickable reference number
     st.markdown("### Quote Results")
     
-    # Create table header
+    # Create a properly aligned table using HTML for header and styled columns for data
     st.markdown("""
-    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-        <thead>
-            <tr style="background-color: #f0f0f0;">
-                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Reference Number</th>
-                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Prospect</th>
-                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Status</th>
-                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Process Date</th>
-                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Effective Date</th>
-                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">User ID</th>
-                <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Company / Branch</th>
-            </tr>
-        </thead>
-    </table>
+    <div class="quote-table-container" style="
+        width: 100%; 
+        border: 1px solid var(--border-color); 
+        border-collapse: collapse; 
+        font-family: Arial, sans-serif;
+        background: var(--bg-primary);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px var(--shadow-color);
+    ">
+        <div style="
+            display: flex; 
+            background: var(--bg-secondary); 
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        ">
+            <div style="width: 15%; padding: 12px 8px; border-right: 1px solid var(--border-color); font-weight: bold; color: var(--text-primary);">Reference Number</div>
+            <div style="width: 30%; padding: 12px 8px; border-right: 1px solid var(--border-color); font-weight: bold; color: var(--text-primary);">Prospect</div>
+            <div style="width: 10%; padding: 12px 8px; border-right: 1px solid var(--border-color); font-weight: bold; color: var(--text-primary);">Status</div>
+            <div style="width: 12%; padding: 12px 8px; border-right: 1px solid var(--border-color); font-weight: bold; color: var(--text-primary);">Process Date</div>
+            <div style="width: 12%; padding: 12px 8px; border-right: 1px solid var(--border-color); font-weight: bold; color: var(--text-primary);">Effective Date</div>
+            <div style="width: 8%; padding: 12px 8px; border-right: 1px solid var(--border-color); font-weight: bold; color: var(--text-primary);">User ID</div>
+            <div style="width: 23%; padding: 12px 8px; font-weight: bold; color: var(--text-primary);">Company / Branch</div>
+        </div>
+    </div>
     """, unsafe_allow_html=True)
     
-    # Create clickable reference number row
-    col1, col2, col3, col4, col5, col6, col7 = st.columns([1.2, 2.5, 1, 1, 1, 0.8, 2])
+    # Create data row using columns with exact same proportions
+    col1, col2, col3, col4, col5, col6, col7 = st.columns([15, 30, 10, 12, 12, 8, 23])
     
     with col1:
-        if st.button(st.session_state["quote_reference"], key="ref_number_click"):
+        # Create a clickable link-styled button for the reference number
+        if st.button(st.session_state["quote_reference"], key="ref_number_click", 
+                    help="Click to view quote details"):
             st.session_state["current_step"] = 3
             st.rerun()
     
     with col2:
-        st.write(f"{st.session_state['client_first']} {st.session_state['client_last']}, {st.session_state['client_addr']}")
+        st.markdown(f'<div class="table-cell" style="padding: 12px 8px; min-height: 40px; display: flex; align-items: center; border: 1px solid var(--border-color); border-top: none; background-color: var(--bg-primary); color: var(--text-primary);">{st.session_state["client_first"]} {st.session_state["client_last"]}, {st.session_state["client_addr"]}</div>', unsafe_allow_html=True)
     
     with col3:
-        st.write("In progress")
+        st.markdown('<div class="table-cell" style="padding: 12px 8px; min-height: 40px; display: flex; align-items: center; border: 1px solid var(--border-color); border-top: none; border-left: none; background-color: var(--bg-primary); color: var(--text-primary);">In progress</div>', unsafe_allow_html=True)
     
     with col4:
-        st.write(st.session_state["process_date"].strftime("%b %d, %Y"))
+        st.markdown(f'<div class="table-cell" style="padding: 12px 8px; min-height: 40px; display: flex; align-items: center; border: 1px solid var(--border-color); border-top: none; border-left: none; background-color: var(--bg-primary); color: var(--text-primary);">{st.session_state["process_date"].strftime("%b %d, %Y")}</div>', unsafe_allow_html=True)
     
     with col5:
-        st.write(st.session_state["effective"].strftime("%b %d, %Y"))
+        st.markdown(f'<div class="table-cell" style="padding: 12px 8px; min-height: 40px; display: flex; align-items: center; border: 1px solid var(--border-color); border-top: none; border-left: none; background-color: var(--bg-primary); color: var(--text-primary);">{st.session_state["effective"].strftime("%b %d, %Y")}</div>', unsafe_allow_html=True)
     
     with col6:
-        st.write(st.session_state["user_id"])
+        st.markdown(f'<div class="table-cell" style="padding: 12px 8px; min-height: 40px; display: flex; align-items: center; border: 1px solid var(--border-color); border-top: none; border-left: none; background-color: var(--bg-primary); color: var(--text-primary);">{st.session_state["user_id"]}</div>', unsafe_allow_html=True)
     
     with col7:
-        st.write(f"{st.session_state['company']} — {st.session_state['branch']}")
+        st.markdown(f'<div class="table-cell" style="padding: 12px 8px; min-height: 40px; display: flex; align-items: center; border: 1px solid var(--border-color); border-top: none; border-left: none; background-color: var(--bg-primary); color: var(--text-primary);">{st.session_state["company"]} — {st.session_state["branch"]}</div>', unsafe_allow_html=True)
     
     # Add a divider line
     st.markdown("---")
@@ -480,6 +495,118 @@ def step7_client_entry():
         
         st.markdown("**Address**")
         st.text_input("Address", value="1386 CASTLEMORE AVE", label_visibility="collapsed")
+        
+        # Additional address fields
+        c1, c2 = st.columns(2)
+        with c1:
+            st.text_input("City", value="Markham", label_visibility="collapsed")
+        with c2:
+            st.text_input("Additional Address Line", label_visibility="collapsed")
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            st.text_input("Additional Address Line 2", label_visibility="collapsed")
+        with c2:
+            st.text_input("Additional Address Line 3", label_visibility="collapsed")
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**Province**")
+            st.selectbox("Province", ["Ontario"], index=0, label_visibility="collapsed")
+        with c2:
+            st.markdown("**Postal Code**")
+            col1, col2 = st.columns([2, 1])
+            with col1:
+                st.text_input("Postal Code", value="L6E0H1", label_visibility="collapsed")
+            with col2:
+                validate = st.form_submit_button("Validate", type="secondary")
+
+        # Telephone Section
+        st.markdown("""
+        <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+            TELEPHONE
+        </div>
+        """, unsafe_allow_html=True)
+        
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            st.markdown("**Residence**")
+            st.text_input("Residence", value="437-986-7928", label_visibility="collapsed")
+        with c2:
+            st.markdown("**Business**")
+            st.text_input("Business", value="nnn-nnn-nnnn", label_visibility="collapsed")
+        with c3:
+            st.markdown("**Ext**")
+            st.text_input("Ext", label_visibility="collapsed")
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**Cell Phone**")
+            st.text_input("Cell Phone", value="nnn-nnn-nnnn", label_visibility="collapsed")
+        with c2:
+            st.markdown("**Contact**")
+            st.text_input("Contact", label_visibility="collapsed")
+
+        # Additional Information / Paperless Policy Delivery Preference Section
+        st.markdown("""
+        <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+            ADDITIONAL INFORMATION / PAPERLESS POLICY DELIVERY PREFERENCE
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("**Mailing Address**")
+        st.text_input("Mailing Address", value="The most recent address", label_visibility="collapsed")
+        
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            st.markdown("**Occupation**")
+            st.selectbox("Occupation", ["All other"], index=0, label_visibility="collapsed")
+        with c2:
+            st.markdown("**Cross Reference Date**")
+            st.text_input("Cross Reference Date", value="dd/mm/yyyy", label_visibility="collapsed")
+        with c3:
+            st.markdown("**Tax Exempt**")
+            col1, col2 = st.columns(2)
+            with col1:
+                st.radio("Tax Exempt", ["Yes", "No"], index=1, label_visibility="collapsed", horizontal=True)
+            with col2:
+                st.markdown("**Certificate #**")
+                st.text_input("Certificate #", label_visibility="collapsed")
+
+        # Policy Document Mailing Preference Section
+        st.markdown("""
+        <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+            POLICY DOCUMENT MAILING PREFERENCE
+        </div>
+        """, unsafe_allow_html=True)
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**Policy Documents Mailing Preference**")
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.checkbox("BMS", value=True)
+            with col2:
+                st.checkbox("Email")
+            with col3:
+                st.checkbox("Print")
+        with c2:
+            st.markdown("**Reason**")
+            st.selectbox("Reason", ["Select reason..."], index=0, label_visibility="collapsed")
+        
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("**Liability Slip Mailing Preference**")
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.checkbox("Print", key="liability_print")
+            with col2:
+                st.checkbox("Email", key="liability_email")
+            with col3:
+                st.checkbox("Text", key="liability_text")
+        with c2:
+            st.markdown("**E-Mail Address**")
+            st.text_input("E-Mail Address", value="VINCENTYEUNG2002@GMAIL.CO", label_visibility="collapsed")
 
         # Bottom buttons row
         st.markdown("<br>", unsafe_allow_html=True)
@@ -495,6 +622,9 @@ def step7_client_entry():
             bank = st.form_submit_button("Bank Details", type="secondary")
         with c5:
             confirm = st.form_submit_button("Confirm", type="primary")
+        
+        if validate:
+            st.success("Postal code validated successfully.")
         
         if confirm:
             st.session_state["client_created"] = True

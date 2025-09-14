@@ -1,71 +1,636 @@
-/* style.css */
+/* Professional Aviva Business Portal Styling */
 
-/* General body styling */
-body {
-    font-family: Arial, sans-serif;
+/* Import modern fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Global styling with theme support */
+* {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Header styling */
+/* CSS Custom Properties for theme support */
+:root {
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --border-color: #e2e8f0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-primary: #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --text-muted: #94a3b8;
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --border-color: #334155;
+        --shadow-color: rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Hide Streamlit header and menu */
 div[data-testid="stHeader"] {
     display: none;
 }
 
-/* Make app UI style like the screenshot */
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+/* Main app container with theme support */
 [data-testid="stAppViewContainer"] {
-    background-color: #FFFFFF;
+    background: var(--bg-secondary);
+    min-height: 100vh;
+    color: var(--text-primary);
 }
 
 [data-testid="stSidebar"] {
-    background-color: #EFEFEF;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
 }
 
+/* Typography improvements with theme support */
 h1, h2, h3, h4, h5, h6 {
-    color: #00005A;
+    color: var(--text-primary) !important;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.75rem;
 }
 
-/* Style for the top navigation bar */
-.nav-bar {
-    display: flex;
-    justify-content: space-around;
-    padding: 10px;
-    background-color: #00005A;
+/* Ensure text contrast in all elements */
+p, span, div, label {
+    color: var(--text-primary);
+}
+
+/* Secondary text elements */
+.caption, [data-testid="caption"] {
+    color: var(--text-secondary) !important;
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.875rem; }
+h3 { font-size: 1.5rem; }
+
+/* Enhanced demo banner with logo integration */
+.demo-banner {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     color: white;
+    padding: 16px 32px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
 }
 
-.nav-bar a {
-    color: white;
-    text-decoration: none;
+.demo-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%), 
+                linear-gradient(-45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.1) 75%), 
+                linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.1) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    opacity: 0.1;
+    pointer-events: none;
 }
 
-/* Main content styling */
-.main-content {
-    padding: 20px;
-}
-
-/* Button styling */
+/* Professional button styling with high visibility */
 .stButton button {
-    background-color: #D3D3D3;
-    color: #000000;
-    border-radius: 5px;
-    padding: 10px 20px;
-    border: 1px solid #000000;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    color: #ffffff !important;
+    border: 2px solid #3b82f6 !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+    min-height: 44px !important;
 }
 
 .stButton button:hover {
-    background-color: #C0C0C0;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4) !important;
+    transform: translateY(-2px) !important;
+    color: #ffffff !important;
 }
 
-/* Styling for the demo banner */
-.demo-banner {
-    background-color: #f0f0f0;
-    padding: 10px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    color: #00005A;
+.stButton button:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3) !important;
 }
 
+.stButton button:focus {
+    outline: 3px solid rgba(59, 130, 246, 0.5) !important;
+    outline-offset: 2px !important;
+}
+
+/* Secondary button styling with high visibility */
+.stButton button[kind="secondary"] {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    border: 2px solid var(--border-color) !important;
+    box-shadow: 0 2px 8px var(--shadow-color) !important;
+    font-weight: 600 !important;
+}
+
+.stButton button[kind="secondary"]:hover {
+    background: var(--bg-secondary) !important;
+    border-color: #3b82f6 !important;
+    color: #3b82f6 !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Dark mode button enhancements */
+@media (prefers-color-scheme: dark) {
+    .stButton button {
+        background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%) !important;
+        border-color: #60a5fa !important;
+        box-shadow: 0 4px 8px rgba(96, 165, 250, 0.4) !important;
+    }
+    
+    .stButton button:hover {
+        background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%) !important;
+        border-color: #93c5fd !important;
+        box-shadow: 0 6px 16px rgba(96, 165, 250, 0.5) !important;
+    }
+    
+    .stButton button[kind="secondary"] {
+        border-color: #475569 !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+    }
+    
+    .stButton button[kind="secondary"]:hover {
+        border-color: #60a5fa !important;
+        color: #60a5fa !important;
+        box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3) !important;
+    }
+}
+
+/* Form styling improvements with theme support */
+.stTextInput input, .stSelectbox select, .stDateInput input {
+    border: 2px solid var(--border-color) !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    transition: all 0.2s ease !important;
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.stTextInput input:focus, .stSelectbox select:focus, .stDateInput input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+    outline: none !important;
+}
+
+/* Streamlit input labels */
+.stTextInput label, .stSelectbox label, .stDateInput label {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+}
+
+/* Info box styling */
+.stInfo {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border: 1px solid #93c5fd;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+/* Success message styling */
+.stSuccess {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border: 1px solid #86efac;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+/* Warning message styling */
+.stWarning {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+/* Image styling */
 img {
     max-width: 100%;
     height: auto;
+    border-radius: 8px;
+}
+
+/* Professional table styling with theme support */
+table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    background: var(--bg-primary) !important;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+table th, table td {
+    border: 1px solid var(--border-color) !important;
+    padding: 16px 12px !important;
+    text-align: left !important;
+    vertical-align: middle !important;
+    font-size: 14px;
+    color: var(--text-primary) !important;
+}
+
+table th {
+    background: var(--bg-secondary) !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+}
+
+table tr:hover {
+    background: var(--bg-secondary) !important;
+    transition: all 0.2s ease;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* Enhanced reference number button styling */
+button[title="Click to view quote details"] {
+    background: white !important;
+    border: 1px solid #e2e8f0 !important;
+    border-top: none !important;
+    color: #3b82f6 !important;
+    text-decoration: underline !important;
+    cursor: pointer !important;
+    padding: 16px 12px !important;
+    font-size: 14px !important;
+    font-family: inherit !important;
+    width: 100% !important;
+    text-align: left !important;
+    min-height: 56px !important;
+    display: flex !important;
+    align-items: center !important;
+    border-radius: 0 !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+button[title="Click to view quote details"]:hover {
+    color: #1d4ed8 !important;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+button[title="Click to view quote details"]:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Form section headers */
+div[style*="background-color: #003366"] {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+    border-radius: 8px 8px 0 0 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    margin: 24px 0 0 0 !important;
+}
+
+/* Card-like containers for form sections with theme support */
+.stForm {
+    background: var(--bg-primary) !important;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    margin: 16px 0;
+}
+
+/* Metric styling improvements with theme support */
+[data-testid="metric-container"] {
+    background: var(--bg-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+[data-testid="metric-container"] [data-testid="metric-label"] {
+    color: var(--text-secondary) !important;
+}
+
+[data-testid="metric-container"] [data-testid="metric-value"] {
+    color: var(--text-primary) !important;
+}
+
+/* Radio button improvements with theme support */
+.stRadio label {
+    font-weight: 500 !important;
+    color: var(--text-primary) !important;
+}
+
+.stRadio > div {
+    color: var(--text-primary) !important;
+}
+
+/* Checkbox improvements with theme support */
+.stCheckbox label {
+    font-weight: 500 !important;
+    color: var(--text-primary) !important;
+}
+
+.stCheckbox > div {
+    color: var(--text-primary) !important;
+}
+
+/* Selectbox improvements with theme support */
+.stSelectbox label {
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 8px;
+}
+
+/* Text input label improvements with theme support */
+.stTextInput label {
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 8px;
+}
+
+/* Date input improvements with theme support */
+.stDateInput label {
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 8px;
+}
+
+/* Streamlit markdown text */
+[data-testid="stMarkdownContainer"] {
+    color: var(--text-primary) !important;
+}
+
+/* Streamlit text elements */
+[data-testid="stText"] {
+    color: var(--text-primary) !important;
+}
+
+/* Divider styling */
+hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #e2e8f0 50%, transparent 100%);
+    margin: 32px 0;
+}
+
+/* Caption text improvements */
+.caption {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* Container padding improvements */
+[data-testid="stAppViewContainer"] > .main {
+    padding: 2rem 3rem;
+}
+
+/* Logo styling improvements */
+[data-testid="stImage"] img {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: white;
+    padding: 8px;
+}
+
+/* Header logo specific styling */
+[data-testid="column"]:first-child [data-testid="stImage"] img {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background: white;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+/* Enhanced Aviva header styling for maximum visibility */
+.aviva-header {
+    position: relative;
+    z-index: 10;
+}
+
+/* Dark mode enhancements for header */
+@media (prefers-color-scheme: dark) {
+    .aviva-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+        border-color: #64748b !important;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+    }
+    
+    .aviva-header h1 {
+        background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+    }
+    
+    .aviva-header p {
+        color: #e2e8f0 !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    }
+}
+
+/* High contrast mode for header */
+@media (prefers-contrast: high) {
+    .aviva-header {
+        background: #000000 !important;
+        border: 3px solid #ffffff !important;
+    }
+    
+    .aviva-header h1 {
+        color: #ffffff !important;
+        background: none !important;
+        -webkit-text-fill-color: #ffffff !important;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 1) !important;
+    }
+    
+    .aviva-header p {
+        color: #ffffff !important;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 1) !important;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        .aviva-header {
+            background: #ffffff !important;
+            border: 3px solid #000000 !important;
+        }
+        
+        .aviva-header h1 {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 1) !important;
+        }
+        
+        .aviva-header p {
+            color: #000000 !important;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 1) !important;
+        }
+    }
+}
+
+/* Chrome-specific fixes for theme compatibility */
+@media screen {
+    /* Force color scheme awareness */
+    html {
+        color-scheme: light dark;
+    }
+    
+    /* Ensure proper text rendering in Chrome */
+    body, * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+    
+    /* Chrome dark mode text fixes */
+    input, select, textarea {
+        color: var(--text-primary) !important;
+        background: var(--bg-primary) !important;
+    }
+    
+    /* Ensure buttons are readable */
+    button {
+        color: inherit !important;
+    }
+    
+    /* Fix Chrome auto-fill styles */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+        -webkit-text-fill-color: var(--text-primary) !important;
+        -webkit-box-shadow: 0 0 0px 1000px var(--bg-primary) inset !important;
+        transition: background-color 5000s ease-in-out 0s !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --text-primary: #000000;
+        --text-secondary: #333333;
+        --bg-primary: #ffffff;
+        --border-color: #000000;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --bg-primary: #000000;
+            --border-color: #ffffff;
+        }
+    }
+}
+
+/* Quote table specific styling for theme support */
+.quote-table-container {
+    background: var(--bg-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 2px 8px var(--shadow-color) !important;
+}
+
+.table-cell {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.table-cell:hover {
+    background: var(--bg-secondary) !important;
+}
+
+/* Toolbar container styling for theme support */
+.toolbar-container {
+    background: var(--bg-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 2px 4px var(--shadow-color) !important;
+}
+
+.toolbar-container h2 {
+    color: var(--text-primary) !important;
+}
+
+.toolbar-container p {
+    color: var(--text-secondary) !important;
+}
+
+/* Dark mode specific enhancements */
+@media (prefers-color-scheme: dark) {
+    .quote-table-container {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+    }
+    
+    .toolbar-container {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .quote-table-container,
+    .toolbar-container {
+        border: 2px solid var(--text-primary) !important;
+    }
+    
+    .table-cell {
+        border: 1px solid var(--text-primary) !important;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    [data-testid="stAppViewContainer"] > .main {
+        padding: 1rem;
+    }
+    
+    table th, table td {
+        padding: 12px 8px !important;
+        font-size: 12px;
+    }
+    
+    .quote-table-container div {
+        padding: 8px 4px !important;
+        font-size: 12px !important;
+    }
+    
+    .toolbar-container {
+        padding: 16px !important;
+    }
 }
