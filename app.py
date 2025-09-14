@@ -22,7 +22,7 @@ def init_state():
         "client_addr": "1386 Castlemore Ave, Markham ON",
         "company": "Aviva Insurance Company of Canada",
         "branch": "A-10 Ontario",
-        "broker_id": "27257",
+        "broker_id": "",
         "user_id": "123068",
         "effective": date.today() + timedelta(days=10),
         "process_date": date.today(),
@@ -643,53 +643,354 @@ def step8_client_confirmation():
         st.rerun()
 
 def step9_policy_selection():
-    toolbar("Step 9: Policy Selection", "Verify key policy details before issuance.")
-    two_cols(
-        lambda: st.write(f'''**Client:** {st.session_state['client_first']} Cheuk Fun {st.session_state['client_last']}
-**Client Number:** {st.session_state['client_number']}'''),
-        lambda: st.write(f"**Company/Branch:** {st.session_state['company']} — {st.session_state['branch']}")
-    )
-    two_cols(
-        lambda: st.write(f'''**Province:** {st.session_state['province']}
-**Product Type:** {st.session_state['product_type']}'''),
-        lambda: st.write(f'''**Broker #:** {st.session_state['broker_id']}
-**Policy Term:** {st.session_state['effective'].strftime('%b %d, %Y')} · 12 months''')
-    )
+    # Header with version and timestamp
+    st.markdown("### POLICY SELECTION")
+    st.markdown(f'<div style="float: right; color: #666; font-size: 14px;">NP 5001 ver 7.0</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="float: right; clear: both; color: #666; font-size: 14px;">{date.today().strftime("Wed %d %b %y %H:%M:%S %p")}</div>', unsafe_allow_html=True)
+    st.markdown('<div style="clear: both;"></div>', unsafe_allow_html=True)
+    
+    # Client Name section
+    st.markdown("**Client Name**")
+    st.markdown(f"VINCENT CHEUK FUN YEUNG")
+    
+    # Client Number section
+    st.markdown("**Client Number**")
+    st.markdown(f"{st.session_state['client_number']}")
+    
+    # Two column layout for Company/Branch and Province sections
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("**Company and Branch**")
+        st.markdown("**Company**")
+        st.markdown("1 - Aviva Insurance Company of Canada")
+        st.markdown("**Branch**")
+        st.markdown("A - 10 - Ontario")
+    
+    with col2:
+        st.markdown("**Province**")
+        st.markdown("**Query Province**")
+        st.markdown("Ontario")
+    
+    # Product section
+    st.markdown("**Product**")
+    st.markdown("**Product Type**")
+    st.markdown("Property")
+    
+    # Broker section
+    st.markdown("**Broker**")
+    st.markdown("**Broker #**")
+    st.markdown("27267")
+    
+    # Policy Term section
+    st.markdown("**Policy Term**")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("**Effective Date**")
+        st.markdown(f"{st.session_state['effective'].strftime('Sep %d, %Y')}")
+    with col2:
+        st.markdown("**Term**")
+        st.markdown("12 Months")
+    
+    # Bottom buttons
+    st.markdown("<br><br>", unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     c1.button("Cancel Transaction")
     if c2.button("Confirm ➜"):
         st.session_state["current_step"] = 10
         st.rerun()
 
-def step10_general_info():
-    toolbar("Step 10: General Information", "Policy setup details and next workflow tabs.")
-    two_cols(
-        lambda: st.write(f'''**Policy Number:** {st.session_state['policy_number']}
-**Processing Date:** {st.session_state['process_date'].strftime('%b %d, %Y')}
-**Status:** In Progress'''),
-        lambda: st.write(f'''**Company/Branch:** {st.session_state['company']} — {st.session_state['branch']}
-**Client Number:** {st.session_state['client_number']}
-**Combined Policy Discount:** ✅''')
+def step10_customer_consent():
+    # Header with version and timestamp
+    st.markdown("### CUSTOMER CONSENT")
+    st.markdown(f'<div style="float: right; color: #666; font-size: 14px;">CCP001 ver 1.0</div>', unsafe_allow_html=True)
+    st.markdown('<div style="clear: both;"></div>', unsafe_allow_html=True)
+    
+    # Policy Number
+    st.markdown("**Policy Number**")
+    st.markdown(f"{st.session_state['policy_number']}")
+    
+    # Declaration of Applicant section
+    st.markdown("""
+    <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+        Declaration of Applicant
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Consent question
+    st.markdown("**Does the Applicant agree to the following statements?**")
+    consent_choice = st.radio(
+        "Does the Applicant agree to the following statements?",
+        options=["Yes", "No"],
+        index=0,
+        key="consent_agreement",
+        label_visibility="collapsed",
+        horizontal=True
     )
-    two_cols(
-        lambda: st.write(f'''**Insured Type:** Individual
-**Insured Name:** {st.session_state['client_first']} Cheuk Fun {st.session_state['client_last']}
-**Insured & Mailing Address:** {st.session_state['client_addr']}'''),
-        lambda: st.write(f'''**Master Broker:** Element Insurance — #{st.session_state['broker_id']}
-**Term:** {st.session_state['effective'].strftime('%b %d, %Y')} → {(st.session_state['effective'] + timedelta(days=365)).strftime('%b %d, %Y')}
-**Policy Province:** {st.session_state['province']}''')
-    )
+    
+    # Consent text sections
+    st.markdown("""
+    **By Clicking "Yes" to the above question, you agree to provide Aviva with consent on behalf of yourself and other individuals 
+    listed to collect and use your credit information**
+    
+    **By Clicking "No" to the above question, you disagree to provide Aviva with consent on behalf of yourself and other individuals 
+    listed to collect and use your credit information**
+    
+    **Consent to Use of Personal and Credit Information**
+    
+    To provide you with the best possible price for your insurance policy, Aviva is asking for your consent to obtain your credit 
+    information, which may include your credit score and other information in your credit file in addition to using your credit 
+    information for the purpose of writing your insurance policy. We may also ask TransUnion, Equifax and other sources to verify 
+    your information in connection with your insurance policy. This information will be collected and used in accordance with our Privacy 
+    Policy. This credit inquiry may appear on your credit file and may be accessed during your policy renewal and at any time while 
+    you have a policy with Aviva. When accessed, Aviva Insurance Company and its affiliates will be listed as an inquiry to report an 
+    existing account in good standing, and will not be treated as an application for new credit or service. This consent is not a 
+    consent to collection and use of your credit information is optional, and you may withdraw your consent at any time by contacting 
+    your broker; however, this may impact your price.
+    
+    The personal information you provide in this webform will be used by Aviva Canada Inc. and our member companies ("Aviva") to 
+    process your quote, issue your insurance contract, if applicable, and support the administration of your policy. The personal 
+    information may be validated and reviewed, including your claims and policy history, and used in statistical models to calculate 
+    your insurance risk and premium.
+    
+    The personal information you provide may also be pooled with information from other sources and subject to analysis for the 
+    limited purpose of preventing, detecting or suppressing fraud. For this purpose, and to validate the information provided in this 
+    application, Aviva may report to and obtain information from various databases.
+    """)
+    
+    # Additional consent information
+    st.markdown("""
+    If the information returned from these sources differs from what you have disclosed, the price and coverages offered to you may 
+    change, or your policy may be cancelled.
+    
+    Aviva may also collect, use or disclose your personal information for other purposes. These purposes and our privacy practices 
+    and procedures are outlined in our respective privacy policies, as well as information about your privacy rights. Aviva's privacy 
+    policy can be obtained at www.avivacanada.com
+    
+    By clicking the "Submit" button below, you consent to Aviva collecting, using and disclosing the personal information you provide 
+    in connection with this webform and declare that you have obtained consent from the individuals listed in this webform for the 
+    collection, use and disclosure of their personal information, all as described above.
+    """)
+    
+    # Personal Information Form Section
+    st.markdown("""
+    <div style="background-color: #e6e6e6; padding: 10px; margin: 20px 0; border-radius: 5px;">
+        <strong>Personal Information Form</strong>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Form fields in a structured layout
+    col1, col2, col3 = st.columns([2, 2, 2])
+    
+    with col1:
+        st.text_input("Last Name", value="YEUNG", key="consent_last_name")
+    
+    with col2:
+        st.text_input("First Name", value="VINCENT CHEUK FUN", key="consent_first_name")
+    
+    with col3:
+        st.text_input("Middle Name", key="consent_middle_name")
+    
+    # Street Address row
+    st.text_input("Street Address", value="1386 CASTLEMORE AVE", key="consent_street_address")
+    
+    # City, Province, Postal Code row
+    col1, col2, col3 = st.columns([2, 2, 1])
+    
+    with col1:
+        st.text_input("City", value="MARKHAM", key="consent_city")
+    
+    with col2:
+        st.selectbox("Province", ["Ontario"], index=0, key="consent_province")
+    
+    with col3:
+        st.text_input("Postal Code", value="L6E0H1", key="consent_postal_code")
+    
+    # Date of Birth and Home Phone row
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.text_input("Date Of Birth", value="01/01/1980", key="consent_dob")
+    
+    with col2:
+        st.text_input("Home Phone", value="437-986-7928", key="consent_home_phone")
+    
+    # Submit and Exit buttons
+    st.markdown("<br>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([2, 1, 1])
+    
+    with col2:
+        submit_clicked = st.button("Submit", type="primary")
+    
+    with col3:
+        exit_clicked = st.button("Exit", type="secondary")
+    
+    # Handle button actions
+    if submit_clicked:
+        if consent_choice == "Yes":
+            st.session_state["consent_recorded"] = True
+            st.success("Consent submitted successfully!")
+            st.session_state["current_step"] = 11
+            st.rerun()
+        else:
+            st.warning("You must agree to the consent statements to proceed.")
+    
+    if exit_clicked:
+        st.session_state["current_step"] = 9  # Go back to policy selection
+        st.rerun()
+
+def step11_general_info():
+    # Header with version and timestamp
+    st.markdown("### GENERAL INFORMATION")
+    st.markdown(f'<div style="float: right; color: #666; font-size: 14px;">Wed 10 Sep 25 3:34:39 pm</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="float: right; clear: both; color: #666; font-size: 14px;">NPP001 ver 7.0</div>', unsafe_allow_html=True)
+    st.markdown('<div style="clear: both;"></div>', unsafe_allow_html=True)
+    
+    # Top row - Policy info
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("**Policy Number**")
+        st.markdown(f"{st.session_state['policy_number']}")
+        st.markdown("**Processing Date**")
+        st.markdown("Sep 10, 2025")
+        st.markdown("**Status**")
+        st.markdown("In progress")
+    
+    with col2:
+        st.markdown("**Product**")
+        st.markdown("Property")
+        st.markdown("**Company**")
+        st.markdown("1 - Aviva Insurance Company of Canada")
+        st.markdown("**Branch**")
+        st.markdown("A - 10 - Ontario")
+    
+    with col3:
+        st.markdown("**Client Number**")
+        st.markdown(f"{st.session_state['client_number']}")
+        st.markdown("**Branch**")
+        st.markdown("Aviva")
+        st.markdown("**Client Association**")
+        st.markdown("No")
+        st.markdown("**Combined Policy Discount**")
+        st.checkbox("Combined Policy Discount", value=True, key="combined_discount", label_visibility="collapsed")
+    
+    # Policy Holder Information Section
+    st.markdown("""
+    <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+        POLICY HOLDER INFORMATION
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2 = st.columns([1, 3])
+    
+    with col1:
+        st.markdown("**Insured Type**")
+        st.selectbox("Insured Type", ["Individual"], index=0, key="insured_type", label_visibility="collapsed")
+        st.markdown("**Insured Name**")
+        st.selectbox("Insured Name", ["VINCENT CHEUK FUN YEUNG"], index=0, key="insured_name", label_visibility="collapsed")
+    
+    with col2:
+        st.markdown("**Insured Address**")
+        st.text_input("Insured Address", value="1386 CASTLEMORE AVE MARKHAM ON L6E0H1", key="insured_address", label_visibility="collapsed")
+        st.markdown("**Mailing Address**")
+        st.text_input("Mailing Address", value="1386 CASTLEMORE AVE MARKHAM ON L6E0H1", key="mailing_address", label_visibility="collapsed")
+    
+    # Broker Information Section
+    st.markdown("""
+    <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+        BROKER INFORMATION
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("**Master Broker Name**")
+        st.text_input("Master Broker Name", value="Element Insurance - 27267", key="master_broker", label_visibility="collapsed")
+        st.markdown("**Address**")
+        st.text_input("Broker Address", value="303-3660 VICTORIA PARK AVE NORTH YORK ON M2H2P7", key="broker_address", label_visibility="collapsed")
+        st.markdown("**Telephone #**")
+        st.text_input("Telephone", value="(416) 613-7867", key="broker_phone", label_visibility="collapsed")
+        st.markdown("**Fax #**")
+        st.text_input("Fax", value="(416) 613-7868", key="broker_fax", label_visibility="collapsed")
+    
+    with col2:
+        st.markdown("**Group Name**")
+        st.text_input("Group Name", key="group_name", label_visibility="collapsed")
+        st.markdown("**Broker #**")
+        st.text_input("Broker Number", value="27267", key="broker_number", label_visibility="collapsed")
+    
+    # Policy Term Section
+    st.markdown("""
+    <div style="background-color: #003366; color: white; padding: 8px; margin: 20px 0 10px 0; font-weight: bold;">
+        POLICY TERM
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # First row of policy term fields
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown("**Effective Date**")
+        st.date_input("Effective Date", value=st.session_state['effective'], key="policy_effective_date", label_visibility="collapsed")
+        st.markdown("**Expiry Date**")
+        st.date_input("Expiry Date", value=st.session_state['effective'] + timedelta(days=365), key="policy_expiry_date", label_visibility="collapsed")
+    
+    with col2:
+        st.markdown("**Time**")
+        st.text_input("Time", value="12:01 AM", key="effective_time", label_visibility="collapsed")
+        st.markdown("**Time**")
+        st.text_input("Time", value="12:01 AM", key="expiry_time", label_visibility="collapsed")
+    
+    with col3:
+        st.markdown("**Policy Inception Date**")
+        st.date_input("Policy Inception Date", value=st.session_state['effective'], key="policy_inception_date", label_visibility="collapsed")
+        st.markdown("**Client Loyalty Date**")
+        st.date_input("Client Loyalty Date", value=st.session_state['effective'], key="client_loyalty_date", label_visibility="collapsed")
+    
+    with col4:
+        st.markdown("**Term (in months)**")
+        st.text_input("Term", value="12", key="policy_term_months", label_visibility="collapsed")
+        st.markdown("**Renewal Term**")
+        st.selectbox("Renewal Term", ["12 Months"], index=0, key="renewal_term", label_visibility="collapsed")
+        st.markdown("**Replace Policy Number**")
+        st.text_input("Replace Policy Number", key="replace_policy_number", label_visibility="collapsed")
+    
+    # Second row of policy term fields
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown("**Transferred From**")
+        st.text_input("Transferred From", key="transferred_from", label_visibility="collapsed")
+        st.markdown("**Service Next Renewal**")
+        col_yes, col_no = st.columns(2)
+        with col_yes:
+            st.checkbox("Yes", key="service_renewal_yes")
+        with col_no:
+            st.checkbox("No", value=True, key="service_renewal_no")
+    
+    with col2:
+        st.markdown("**Lapse Next Renewal**")
+        col_yes, col_no = st.columns(2)
+        with col_yes:
+            st.checkbox("Yes", key="lapse_renewal_yes")
+        with col_no:
+            st.checkbox("No", value=True, key="lapse_renewal_no")
+    
+    # Bottom section spacing
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    # Action buttons
     c1, c2, c3, c4, c5, c6 = st.columns(6)
     c1.button("Cancel Transaction")
-    consent = c2.button("Customer Consent")
-    if consent:
-        st.session_state["consent_recorded"] = True
+    c2.button("Customer Consent")
     c3.button("Notes")
     c4.button("Policy General Page")
     c5.button("Save Incomplete")
-    c6.button("Next")
-    if st.session_state["consent_recorded"]:
-        st.success("Customer consent recorded. Continue to Risks → Coverages → Billing → Finalize.")
+    if c6.button("Next"):
+        st.success("General Information completed. Continue to Risks → Coverages → Billing → Finalize.")
+        # Could add navigation to next step here if needed
 
 # ---------- Main App Logic ----------
 app_header()
@@ -704,7 +1005,8 @@ step_map = {
     7: step7_client_entry,
     8: step8_client_confirmation,
     9: step9_policy_selection,
-    10: step10_general_info,
+    10: step10_customer_consent,
+    11: step11_general_info,
 }
 
 # This check is to prevent re-rendering issues with on_change
