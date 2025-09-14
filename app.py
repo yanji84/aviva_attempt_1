@@ -173,7 +173,7 @@ def step1_quote_inquiry():
 
 def handle_reference_search():
     ref_num = st.session_state.reference_number_input
-    if ref_num == "P11162731HAB0003":
+    if ref_num == "17575232903866":
         st.session_state.quote_reference = ref_num
         st.session_state.current_step = 2
         st.session_state.search_message = ""
